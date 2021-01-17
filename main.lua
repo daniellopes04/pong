@@ -3,13 +3,8 @@
     Lecture 0
     
     Implementation of retro game "Pong".
-
-    Rules:
-    - Each player controls a paddle which must be used to hit the ball into the opponent's 
-    player direction.
-    - When the player isn't able to hit the ball back, letting it pass beyond its paddle, the 
-    opponent scores a point.
-    - By getting 10 points, a player wins the match.
+    Made by: Daniel de Sousa
+    https://github.com/daniellopes04
 ]]
 
 -- Push library
@@ -31,6 +26,12 @@ VIRTUAL_HEIGHT = 243
 function love.load()
     -- Use nearest-neighbor filtering on upscaling and downscaling to give it a more low-res look.
     love.graphics.setDefaultFilter("nearest", "nearest")
+
+    -- Loads a new font to globally change the font used by love2d.
+    smallFont = love.graphics.newFont("font.ttf", 8)
+
+    -- Set the current font of love2d to the object created with love.graphics.newFont().
+    love.graphics.setFont(smallFont)
 
     -- Setting up a window using love2d's standard function, setting a size and some flags.
     --[[ love.window.setMode(WINDOW_WIDTH, WINDOW_HEIGHT, {
@@ -78,13 +79,21 @@ function love.draw()
     -- Begin rendering in virtual resolution
     push:apply("start")
 
-    love.graphics.printf(
-        "Hello Pong!",              -- string to render
-        0,                          -- X starting position (0 since it's going to be centered)
-        VIRTUAL_HEIGHT / 2 - 6,     -- Y starting position (default font size in love2d is 12)
-        VIRTUAL_WIDTH,              -- number of pixels that will be aligned
-        "center"                    -- alignment mode ('center', 'rigtht', 'left')
-    )
+    -- Wipes the screen with the color defined by the RGBA set passed.
+    love.graphics.clear(40/255, 45/255, 52/255, 1)
+
+    -- Prints a string into the screen with the position, and alignment passed
+    love.graphics.printf("Hello Pong!", 0, 20, VIRTUAL_WIDTH, "center")
+
+    -- Function that draws a rectangle with dimensions and position passed in the parameters.
+    -- Render the left side paddle (player 1)
+    love.graphics.rectangle("fill", 10, 30, 5, 20)
+
+    -- Render the right side paddle (player 2)
+    love.graphics.rectangle("fill", VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT - 50, 5, 20)
+
+    -- Render the ball (center)
+    love.graphics.rectangle("fill", VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4, 4)
 
     -- Finish rendering in virtual resolution
     push:apply("end")
