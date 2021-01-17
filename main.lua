@@ -30,6 +30,10 @@ function love.load()
     -- Use nearest-neighbor filtering on upscaling and downscaling to give it a more low-res look.
     love.graphics.setDefaultFilter("nearest", "nearest")
 
+    -- "Seed" the random number generator so we have real random generations.
+    -- Uses the current time, since it will vary every time the game starts up.
+    math.randomseed(os.time())
+
     -- Loads a new font to globally change the font used by love2d.
     smallFont = love.graphics.newFont("font.ttf", 8)
 
@@ -54,15 +58,29 @@ function love.load()
         vsync = true
     })
 
-    -- Initializing score variables
+    -- Initializing score variables.
     player1Score = 0
     player2Score = 0
 
-    -- Player's paddle positions on Y axis (they only move up and down)
+    -- Player's paddle positions on Y axis (they only move up and down).
     player1Y = 30
     player2Y = VIRTUAL_HEIGHT - 50 
 
-    -- Setting up the window title
+    -- Position variables of the ball.
+    ballX = VIRTUAL_WIDTH / 2 - 2
+    ballY = VIRTUAL_HEIGHT / 2 - 2
+
+    -- Returns a random value between the left and right number.
+    -- math.random(2) == 1 and 100 or -100  equals to math.random(2) == 1 ? 100 : -100
+    ballDX = math.random(2) == 1 and 100 or -100
+    ballDY = math.random(-50, 50)
+
+    -- Used to transition between different states of the game.
+    -- Normally used for beginning, menus, main game, high score list, etc.
+    -- In this game, it is used to determine behavior during render and update.
+    gameState = "start"
+
+    -- Setting up the window title.
     love.window.setTitle("Pong")
 end
 
@@ -72,8 +90,24 @@ end
 
 function love.keypressed(key)
     if key == "escape" then
-        -- Terminate application
+        -- Terminate application.
         love.event.quit()
+    
+    -- 
+    elseif key == "enter" or key == "return" then
+        if gameState == "start" then
+            gameState = "play"
+        else
+            gameState = "start"
+
+            -- Starts the ball in the middle of the screen.
+            ballX = VIRTUAL_WIDTH / 2 - 2
+            ballY = VIRTUAL_HEIGHT / 2 - 2
+
+            -- Initial random velocity.
+            ballDX = math.random(2) == 1 and 100 or -100
+            ballDY = math.random(-50, 50)
+        end
     end
 end
 
@@ -87,20 +121,28 @@ function love.update(dt)
     if love.keyboard.isDown("w") then
         -- Adding negative speed to player 1 paddle.
         -- Negative because Y grows as we go down the screen.
-        player1Y = player1Y - PADDLE_SPEED * dt
+        -- math.max() prevents the paddle of going off the edge of screen.
+        player1Y = math.max(0, player1Y - PADDLE_SPEED * dt)
     elseif love.keyboard.isDown("s") then
         -- Adding positive speed to player 1 paddle.
-        player1Y = player1Y + PADDLE_SPEED * dt
+        player1Y = math.min(VIRTUAL_HEIGHT - 20, player1Y + PADDLE_SPEED * dt)
     end
         
     -- Player 2 movement
     if love.keyboard.isDown("up") then
         -- Adding negative speed to player 2 paddle.
         -- Negative because Y grows as we go down the screen.
-        player2Y = player2Y - PADDLE_SPEED * dt
+        -- math.max() prevents the paddle of going off the edge of screen.
+        player2Y = math.max(0, player2Y - PADDLE_SPEED * dt)
     elseif love.keyboard.isDown("down") then
         -- Adding positive speed to player 2 paddle.
-        player2Y = player2Y + PADDLE_SPEED * dt
+        player2Y = math.min(VIRTUAL_HEIGHT - 20, player2Y + PADDLE_SPEED * dt)
+    end
+
+    -- Update the ball position based on its DX, DY and game state
+    if gameState == "play" then
+        ballX = ballX + ballDX * dt
+        ballY = ballY + ballDY * dt
     end
 end
 
@@ -132,7 +174,7 @@ function love.draw()
     love.graphics.rectangle("fill", VIRTUAL_WIDTH - 10, player2Y, 5, 20)
 
     -- Render the ball (center)
-    love.graphics.rectangle("fill", VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4, 4)
+    love.graphics.rectangle("fill", ballX, ballY, 4, 4)
 
     -- Finish rendering in virtual resolution
     push:apply("end")
