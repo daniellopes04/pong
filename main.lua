@@ -39,6 +39,9 @@ function love.load()
     -- Use nearest-neighbor filtering on upscaling and downscaling to give it a more low-res look.
     love.graphics.setDefaultFilter("nearest", "nearest")
 
+    -- Setting up the window title.
+    love.window.setTitle("Pong")
+
     -- "Seed" the random number generator so we have real random generations.
     -- Uses the current time, since it will vary every time the game starts up.
     math.randomseed(os.time())
@@ -75,9 +78,6 @@ function love.load()
     -- Normally used for beginning, menus, main game, high score list, etc.
     -- In this game, it is used to determine behavior during render and update.
     gameState = "start"
-
-    -- Setting up the window title.
-    love.window.setTitle("Pong")
 end
 
 --[[
@@ -168,6 +168,19 @@ function love.draw()
     -- Render ball
     ball:render()
 
+    -- Shows the game's FPS.
+    displayFPS()
+
     -- Finish rendering in virtual resolution
     push:apply("end")
+end
+
+--[[
+    Renders the current FPS.
+]]
+
+function displayFPS()
+    love.graphics.setFont(smallFont)
+    love.graphics.setColor(0, 1, 0, 1)
+    love.graphics.print("FPS - "..tostring(love.timer.getFPS()), 10, 10)
 end
