@@ -58,7 +58,8 @@ function love.load()
     sounds = {
         ["paddle_hit"] = love.audio.newSource("sounds/paddle_hit.wav", "static"),
         ["score"] = love.audio.newSource("sounds/score.wav", "static"),
-        ["wall_hit"] = love.audio.newSource("sounds/wall_hit.wav", "static")
+        ["wall_hit"] = love.audio.newSource("sounds/wall_hit.wav", "static"),
+        ["game_over"] = love.audio.newSource("sounds/game_over.wav", "static")
     }
 
     -- Setting up a window with virtual size using "push". 
@@ -211,13 +212,14 @@ function love.update(dt)
         if ball.x < 0 then
             servingPlayer = 1
             player2Score = player2Score + 1
-            sounds["score"]:play()
 
             -- If the player reached a score of 10, the game is over.
             if player2Score == 10 then
                 winningPlayer = 2
                 gameState = "done"
+                sounds["game_over"]:play()
             else
+                sounds["score"]:play()
                 gameState = "serve"
                 ball:reset()
             end
@@ -226,12 +228,13 @@ function love.update(dt)
         if ball.x > VIRTUAL_WIDTH then
             servingPlayer = 2
             player1Score = player1Score + 1
-            sounds["score"]:play()
 
             if player1Score == 10 then
                 winningPlayer = 1
                 gameState = "done"
+                sounds["game_over"]:play()
             else
+                sounds["score"]:play()
                 gameState = "serve"
                 ball:reset()
             end
