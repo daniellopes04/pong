@@ -48,6 +48,7 @@ function love.load()
 
     -- Loads a new font to globally change the font used by love2d.
     smallFont = love.graphics.newFont("font.ttf", 8)
+    largeFont = love.graphics.newFont("font.ttf", 16)
     scoreFont = love.graphics.newFont("font.ttf", 32)
 
     -- Set the current font of love2d to the object created with love.graphics.newFont().
@@ -75,6 +76,9 @@ function love.load()
     -- The player which will be serving. 
     servingPlayer = 1
 
+    -- The player who has won the game.
+    winningPlayer = 0
+
     -- Used to transition between different states of the game.
     -- Normally used for beginning, menus, main game, high score list, etc.
     -- In this game, it is used to determine behavior during render and update.
@@ -97,6 +101,21 @@ function love.keypressed(key)
             gameState = "serve"
         elseif gameState == "serve" then
             gameState = "play"
+        elseif gameState == "done" then
+            -- One player has won the game.
+            -- Now we restart it giving serve to the player who lost.
+            gameState = "serve"
+
+            ball:reset()
+
+            player1Score = 0
+            player2Score = 0
+
+            if winningPlayer == 1 then
+                servingPlayer = 2
+            else
+                servingPlayer = 1
+            end
         end
     end
 end
@@ -176,15 +195,28 @@ function love.update(dt)
         if ball.x < 0 then
             servingPlayer = 1
             player2Score = player2Score + 1
-            gameState = "serve"
-            ball:reset()
+
+            -- If the player reached a score of 10, the game is over.
+            if player2Score == 10 then
+                winningPlayer = 2
+                gameState = "done"
+            else
+                gameState = "serve"
+                ball:reset()
+            end
         end
 
         if ball.x > VIRTUAL_WIDTH then
             servingPlayer = 2
             player1Score = player1Score + 1
-            gameState = "serve"
-            ball:reset()
+
+            if player1Score == 10 then
+                winningPlayer = 1
+                gameState = "done"
+            else
+                gameState = "serve"
+                ball:reset()
+            end
         end
     end
 
@@ -222,6 +254,12 @@ function love.draw()
         love.graphics.printf("Press Enter to serve.", 0, 20, VIRTUAL_WIDTH, "center")
     elseif gameState == "play" then
         -- Nothing to show on play state
+    elseif gameState == "done" then
+        love.graphics.setFont(largeFont)
+        love.graphics.printf("Player ".. tostring(winningPlayer) .." wins!", 
+            0, 10, VIRTUAL_WIDTH, "center")
+        love.graphics.setFont(smallFont)
+        love.graphics.printf("Press Enter to restart.", 0, 30, VIRTUAL_WIDTH, "center")
     end
 
     -- Draw scores on the left and right center of screen
