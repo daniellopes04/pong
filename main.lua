@@ -66,7 +66,7 @@ function love.load()
     -- The virtual resolution will be rendered within the screen, no matter its dimensions. 
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT,{
         fullscreen = false,
-        resizable = false,
+        resizable = true,
         vsync = true
     })
 
@@ -91,6 +91,13 @@ function love.load()
     -- Normally used for beginning, menus, main game, high score list, etc.
     -- In this game, it is used to determine behavior during render and update.
     gameState = "start"
+end
+
+--[[
+    Called by love2d whenever we resize the screen.
+]]
+function love.resize(w, h)
+    push:resize(w, h)
 end
 
 --[[
