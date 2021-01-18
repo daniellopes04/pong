@@ -71,6 +71,9 @@ function love.load()
     player1 = Paddle(10, 30, 5, 20)
     player2 = Paddle(VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT - 30, 5, 20)
 
+    -- The player which will be serving. 
+    servingPlayer = 1
+
     -- Creates ball in the middle of the screen.
     ball = Ball(VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4, 4)
 
@@ -93,12 +96,9 @@ function love.keypressed(key)
     -- In the "play" state, the ball will move in a random direction.
     elseif key == "enter" or key == "return" then
         if gameState == "start" then
+            gameState = "serve"
+        elseif gameState == "serve" then
             gameState = "play"
-        else
-            gameState = "start"
-
-            -- Starts the ball in the middle of the screen.
-            ball:reset()
         end
     end
 end
@@ -128,7 +128,15 @@ function love.update(dt)
     end
 
     -- Implements the mechanics of the game.
-    if gameState == "play" then
+    if gameState == "serve" then
+        -- Changes ball's velocity based on player who last scored.
+        ball.dy = math.random(-50, 50)
+        if(servingPlayer == 1) then
+            ball.dx = math.random(140, 200)
+        else
+            ball.dx = -math.random(140, 200)
+        end
+    elseif gameState == "play" then
         -- Detect ball collision with paddles.
         -- Reverses the dx if collision is true, slightly increasing it.
         -- Changes dy based on the position 
@@ -166,7 +174,24 @@ function love.update(dt)
             ball.dy = -ball.dy
         end
 
-        -- Updates the ball's position
+        -- Detects left and right boundary collision, resets the ball and updates the score.
+        if ball.x < 0 then
+            servingPlayer = 1
+            player2Score = player2Score + 1
+            gameState = "serve"
+            ball:reset()
+        end
+
+        if ball.x > VIRTUAL_WIDTH then
+            servingPlayer = 2
+            player1Score = player1Score + 1
+            gameState = "serve"
+            ball.reset()
+        end
+    end
+
+    -- Updates the ball's position
+    if gameState == "play" then
         ball:update(dt)
     end
 
@@ -195,15 +220,11 @@ function love.draw()
     end
 
     -- Draw scores on the left and right center of screen
-    love.graphics.setFont(scoreFont)
-    love.graphics.print(tostring(player1Score), VIRTUAL_WIDTH / 2 - 50, VIRTUAL_HEIGHT / 3)
-    love.graphics.print(tostring(player2Score), VIRTUAL_WIDTH / 2 + 30, VIRTUAL_HEIGHT / 3)
+    displayScore()
 
-    -- Render paddles
+    -- Render paddles and ball
     player1:render()
     player2:render()
-
-    -- Render ball
     ball:render()
 
     -- Shows the game's FPS.
@@ -211,6 +232,18 @@ function love.draw()
 
     -- Finish rendering in virtual resolution
     push:apply("end")
+end
+
+--[[
+    Simple function for rendering the scores.
+]]
+function displayScore()
+    -- score display
+    love.graphics.setFont(scoreFont)
+    love.graphics.print(tostring(player1Score), VIRTUAL_WIDTH / 2 - 50,
+        VIRTUAL_HEIGHT / 3)
+    love.graphics.print(tostring(player2Score), VIRTUAL_WIDTH / 2 + 30,
+        VIRTUAL_HEIGHT / 3)
 end
 
 --[[
