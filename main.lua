@@ -48,8 +48,6 @@ function love.load()
 
     -- Loads a new font to globally change the font used by love2d.
     smallFont = love.graphics.newFont("font.ttf", 8)
-
-    -- Loads a new font to globally change the font used by love2d.
     scoreFont = love.graphics.newFont("font.ttf", 32)
 
     -- Set the current font of love2d to the object created with love.graphics.newFont().
@@ -63,19 +61,19 @@ function love.load()
         vsync = true
     })
 
-    -- Initializing score variables.
-    player1Score = 0
-    player2Score = 0
-
     -- Initializing player's paddles.
     player1 = Paddle(10, 30, 5, 20)
     player2 = Paddle(VIRTUAL_WIDTH - 10, VIRTUAL_HEIGHT - 30, 5, 20)
 
-    -- The player which will be serving. 
-    servingPlayer = 1
-
     -- Creates ball in the middle of the screen.
     ball = Ball(VIRTUAL_WIDTH / 2 - 2, VIRTUAL_HEIGHT / 2 - 2, 4, 4)
+
+    -- Initializing score variables.
+    player1Score = 0
+    player2Score = 0
+
+    -- The player which will be serving. 
+    servingPlayer = 1
 
     -- Used to transition between different states of the game.
     -- Normally used for beginning, menus, main game, high score list, etc.
@@ -131,7 +129,7 @@ function love.update(dt)
     if gameState == "serve" then
         -- Changes ball's velocity based on player who last scored.
         ball.dy = math.random(-50, 50)
-        if(servingPlayer == 1) then
+        if servingPlayer == 1 then
             ball.dx = math.random(140, 200)
         else
             ball.dx = -math.random(140, 200)
@@ -186,7 +184,7 @@ function love.update(dt)
             servingPlayer = 2
             player1Score = player1Score + 1
             gameState = "serve"
-            ball.reset()
+            ball:reset()
         end
     end
 
@@ -214,9 +212,16 @@ function love.draw()
     love.graphics.setFont(smallFont)
 
     if gameState == "start" then
-        love.graphics.printf("Hello Start State!", 0, 20, VIRTUAL_WIDTH, "center")
-    else
-        love.graphics.printf("Hello Play State!", 0, 20, VIRTUAL_WIDTH, "center")
+        love.graphics.setFont(smallFont)
+        love.graphics.printf("Welcome to Pong!", 0, 10, VIRTUAL_WIDTH, "center")
+        love.graphics.printf("Press Enter to begin.", 0, 20, VIRTUAL_WIDTH, "center")
+    elseif gameState == "serve" then
+        love.graphics.setFont(smallFont)
+        love.graphics.printf("Player ".. tostring(servingPlayer) .."'s serve!", 
+            0, 10, VIRTUAL_WIDTH, "center")
+        love.graphics.printf("Press Enter to serve.", 0, 20, VIRTUAL_WIDTH, "center")
+    elseif gameState == "play" then
+        -- Nothing to show on play state
     end
 
     -- Draw scores on the left and right center of screen
