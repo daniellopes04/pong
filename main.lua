@@ -127,8 +127,46 @@ function love.update(dt)
         player2.dy = 0
     end
 
-    -- Update the ball position.
+    -- Implements the mechanics of the game.
     if gameState == "play" then
+        -- Detect ball collision with paddles.
+        -- Reverses the dx if collision is true, slightly increasing it.
+        -- Changes dy based on the position 
+        if ball:collides(player1) then
+            ball.dx = -ball.dx * 1.03
+            ball.x = player1.x + 5
+
+            -- Keep velocity in the same direction, but randomize it.
+            if ball.dy < 0 then
+                ball.dy = -math.random(10, 150)
+            else
+                ball.dy = math.random(10, 150)
+            end
+        end
+
+        if ball:collides(player2) then
+            ball.dx = -ball.dx * 1.03
+            ball.x = player2.x - 4
+
+            if ball.dy < 0 then
+                ball.dy = -math.random(10, 150)
+            else
+                ball.dy = math.random(10, 150)
+            end
+        end
+
+        -- Detects upper and lower boundary collision, and reflects the ball.
+        if ball.y <= 0 then
+            ball.y = 0
+            ball.dy = -ball.dy
+        end
+
+        if ball.y >= VIRTUAL_HEIGHT - 4 then
+            ball.y = VIRTUAL_HEIGHT - 4
+            ball.dy = -ball.dy
+        end
+
+        -- Updates the ball's position
         ball:update(dt)
     end
 

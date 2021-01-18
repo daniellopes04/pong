@@ -37,6 +37,25 @@ function Ball:reset()
 end
 
 --[[
+    Receives a paddle as argument and returns true or false if their rectangles overlap.
+]]
+
+function Ball:collides(paddle)
+    -- Checks if the ball's edges are farther to the left or right than the paddle's edges.
+    if self.x > paddle.x + paddle.width or paddle.x > self.x + self.width then
+        return false
+    end
+
+    -- Checks if the ball's top and bottom edges are higher or lower than the paddle's edges.
+    if self.y > paddle.y + paddle.height or paddle.y > self.y + self.height then
+        return false
+    end
+
+    -- If the previous aren't true, they're overlapping.
+    return true
+end
+
+--[[
     For apllying the velocity to ball's position and drawing it on screen.
 ]]
 
