@@ -91,6 +91,10 @@ function love.load()
     -- Normally used for beginning, menus, main game, high score list, etc.
     -- In this game, it is used to determine behavior during render and update.
     gameState = "start"
+
+    -- Used to track the game mode set by the player.
+    -- The game modes are player vs player = 1, player vs com = 2, com vs com = 3.
+    gameMode = 1
 end
 
 --[[
@@ -108,13 +112,36 @@ function love.keypressed(key)
     if key == "escape" then
         -- Terminate application.
         love.event.quit()
+    end
+
+    -- Detects PLAYER vs PLAYER's game choice.
+    if key == "1" then
+        if gameState == "start" then
+            gameState = "serve"
+            gameMode = 1
+        end
+    end
+
+    -- Detects PLAYER vs COM's game choice.
+    if key == "2" then
+        if gameState == "start" then
+            gameState = "serve"
+            gameMode = 2
+        end
+    end
+
+    -- Detects COM vs COM's game choice.
+    if key == "3" then
+        if gameState == "start" then
+            gameState = "serve"
+            gameMode = 3
+        end
+    end
     
     -- Pressing enter during the "start" state will change the game state to "play".
     -- In the "play" state, the ball will move in a random direction.
-    elseif key == "enter" or key == "return" then
-        if gameState == "start" then
-            gameState = "serve"
-        elseif gameState == "serve" then
+    if key == "enter" or key == "return" then
+        if gameState == "serve" then
             gameState = "play"
         elseif gameState == "done" then
             -- One player has won the game.
@@ -141,22 +168,29 @@ end
 ]]
 
 function love.update(dt)
-    -- Player 1 movement
-    if love.keyboard.isDown("w") then
-        player1.dy = -PADDLE_SPEED
-    elseif love.keyboard.isDown("s") then
-        player1.dy = PADDLE_SPEED
-    else
-        player1.dy = 0
+    -- Player 1 movement.
+    if gameMode == 1 or gameMode == 2 then
+        if love.keyboard.isDown("w") then
+            player1.dy = -PADDLE_SPEED
+        elseif love.keyboard.isDown("s") then
+            player1.dy = PADDLE_SPEED
+        else
+            player1.dy = 0
+        end
     end
         
-    -- Player 2 movement
-    if love.keyboard.isDown("up") then
-        player2.dy = -PADDLE_SPEED
-    elseif love.keyboard.isDown("down") then
-        player2.dy = PADDLE_SPEED
-    else
-        player2.dy = 0
+    -- Player 2 movement.
+    if gameMode == 1 then
+        if love.keyboard.isDown("up") then
+            player2.dy = -PADDLE_SPEED
+        elseif love.keyboard.isDown("down") then
+            player2.dy = PADDLE_SPEED
+        else
+            player2.dy = 0
+        end
+    -- Player 2 simple AI movement.
+    elseif ball.dy ~= 0 and ball.dx ~= 0 then
+        player2.dy = ball.dy
     end
 
     -- Implements the mechanics of the game.
@@ -171,7 +205,7 @@ function love.update(dt)
     elseif gameState == "play" then
         -- Detect ball collision with paddles.
         -- Reverses the dx if collision is true, slightly increasing it.
-        -- Changes dy based on the position 
+        -- Changes dy based on the position.
         if ball:collides(player1) then
             ball.dx = -ball.dx * 1.03
             ball.x = player1.x + 5
@@ -219,6 +253,7 @@ function love.update(dt)
         if ball.x < 0 then
             servingPlayer = 1
             player2Score = player2Score + 1
+            ball:reset()
 
             -- If the player reached a score of 10, the game is over.
             if player2Score == 10 then
@@ -228,13 +263,13 @@ function love.update(dt)
             else
                 sounds["score"]:play()
                 gameState = "serve"
-                ball:reset()
             end
         end
 
         if ball.x > VIRTUAL_WIDTH then
             servingPlayer = 2
             player1Score = player1Score + 1
+            ball:reset()
 
             if player1Score == 10 then
                 winningPlayer = 1
@@ -243,7 +278,6 @@ function love.update(dt)
             else
                 sounds["score"]:play()
                 gameState = "serve"
-                ball:reset()
             end
         end
     end
@@ -274,14 +308,27 @@ function love.draw()
     if gameState == "start" then
         love.graphics.setFont(smallFont)
         love.graphics.printf("Welcome to Pong!", 0, 10, VIRTUAL_WIDTH, "center")
-        love.graphics.printf("Press Enter to begin.", 0, 20, VIRTUAL_WIDTH, "center")
+        love.graphics.printf("Player vs. Player press 1.", 0, 20, VIRTUAL_WIDTH, "center")
+        love.graphics.printf("Player vs. Com press 2.", 0, 30, VIRTUAL_WIDTH, "center")
+        love.graphics.printf("Com vs. Com press 3.", 0, 40, VIRTUAL_WIDTH, "center")
+
+        love.graphics.printf("Controls", 0, VIRTUAL_HEIGHT - 30, VIRTUAL_WIDTH, "center")
+        love.graphics.printf("Player 1: 'w' and 's'", 0, VIRTUAL_HEIGHT - 20, VIRTUAL_WIDTH, "center")
+        love.graphics.printf("Player 2: 'up' and 'down'", 0, VIRTUAL_HEIGHT - 10, VIRTUAL_WIDTH, "center")
     elseif gameState == "serve" then
         love.graphics.setFont(smallFont)
         love.graphics.printf("Player ".. tostring(servingPlayer) .."'s serve!", 
             0, 10, VIRTUAL_WIDTH, "center")
         love.graphics.printf("Press Enter to serve.", 0, 20, VIRTUAL_WIDTH, "center")
     elseif gameState == "play" then
-        -- Nothing to show on play state
+        --[[ love.graphics.setFont(smallFont)
+        if gameMode == 1 then
+            love.graphics.printf("Player vs. Player", 0, VIRTUAL_HEIGHT - 10, VIRTUAL_WIDTH, "center")
+        elseif gameMode == 2 then
+            love.graphics.printf("Player vs. Com", 0, VIRTUAL_HEIGHT - 10, VIRTUAL_WIDTH, "center")
+        else
+            love.graphics.printf("Com vs. Com", 0, VIRTUAL_HEIGHT - 10, VIRTUAL_WIDTH, "center")
+        end ]]
     elseif gameState == "done" then
         love.graphics.setFont(largeFont)
         love.graphics.printf("Player ".. tostring(winningPlayer) .." wins!", 
