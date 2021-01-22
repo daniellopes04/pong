@@ -177,6 +177,8 @@ function love.update(dt)
         else
             player1.dy = 0
         end
+    else
+        player1.dy = ball.dy
     end
         
     -- Player 2 movement.
@@ -189,14 +191,14 @@ function love.update(dt)
             player2.dy = 0
         end
     -- Player 2 simple AI movement.
-    elseif ball.dy ~= 0 and ball.dx ~= 0 then
+    else
         player2.dy = ball.dy
     end
 
     -- Implements the mechanics of the game.
     if gameState == "serve" then
         -- Changes ball's velocity based on player who last scored.
-        ball.dy = math.random(-50, 50)
+        ball.dy = math.random(10, 150)
         if servingPlayer == 1 then
             ball.dx = math.random(140, 200)
         else
