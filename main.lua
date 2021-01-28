@@ -343,15 +343,6 @@ function love.draw()
             0, 10, VIRTUAL_WIDTH, "center")
         love.graphics.printf("Press Enter to serve.", 0, 20, VIRTUAL_WIDTH, "center")
         love.graphics.printf("Press Q to quit.", 0, 30, VIRTUAL_WIDTH, "center")
-    elseif gameState == "play" then
-        --[[ love.graphics.setFont(smallFont)
-        if gameMode == 1 then
-            love.graphics.printf("Player vs. Player", 0, VIRTUAL_HEIGHT - 10, VIRTUAL_WIDTH, "center")
-        elseif gameMode == 2 then
-            love.graphics.printf("Player vs. Com", 0, VIRTUAL_HEIGHT - 10, VIRTUAL_WIDTH, "center")
-        else
-            love.graphics.printf("Com vs. Com", 0, VIRTUAL_HEIGHT - 10, VIRTUAL_WIDTH, "center")
-        end ]]
     elseif gameState == "done" then
         love.graphics.setFont(largeFont)
         love.graphics.printf("Player ".. tostring(winningPlayer) .." wins!", 
