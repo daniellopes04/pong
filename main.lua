@@ -137,6 +137,13 @@ function love.keypressed(key)
             gameMode = 3
         end
     end
+
+    -- Returns to initial screen
+    if key == "q" then
+        if gameState == "serve" or gameState == "done" then
+            gameState = "start"
+        end
+    end
     
     -- Pressing enter during the "start" state will change the game state to "play".
     -- In the "play" state, the ball will move in a random direction.
@@ -335,6 +342,7 @@ function love.draw()
         love.graphics.printf("Player ".. tostring(servingPlayer) .."'s serve!", 
             0, 10, VIRTUAL_WIDTH, "center")
         love.graphics.printf("Press Enter to serve.", 0, 20, VIRTUAL_WIDTH, "center")
+        love.graphics.printf("Press Q to quit.", 0, 30, VIRTUAL_WIDTH, "center")
     elseif gameState == "play" then
         --[[ love.graphics.setFont(smallFont)
         if gameMode == 1 then
@@ -350,6 +358,7 @@ function love.draw()
             0, 10, VIRTUAL_WIDTH, "center")
         love.graphics.setFont(smallFont)
         love.graphics.printf("Press Enter to restart.", 0, 30, VIRTUAL_WIDTH, "center")
+        love.graphics.printf("Press Q to quit.", 0, 40, VIRTUAL_WIDTH, "center")
     end
 
     -- Draw scores on the left and right center of screen
