@@ -12,7 +12,6 @@ Ball = Class{}
 --[[
     Initializes the Ball object with the given parameters and randomly generates its velocity.
 ]]
-
 function Ball:init(x, y, width, height)
     self.x = x
     self.y = y
@@ -28,7 +27,6 @@ end
 --[[
     Places the ball in the middle of the screen with an inital random velocity.
 ]]
-
 function Ball:reset()
     self.x = VIRTUAL_WIDTH / 2 - 2
     self.y = VIRTUAL_HEIGHT / 2 - 2
@@ -39,7 +37,6 @@ end
 --[[
     Receives a paddle as argument and returns true or false if their rectangles overlap.
 ]]
-
 function Ball:collides(paddle)
     -- Checks if the ball's edges are farther to the left or right than the paddle's edges.
     if self.x > paddle.x + paddle.width or paddle.x > self.x + self.width then
@@ -58,12 +55,14 @@ end
 --[[
     For apllying the velocity to ball's position and drawing it on screen.
 ]]
-
 function Ball:update(dt)
     self.x = self.x + self.dx * dt
     self.y = self.y + self.dy * dt
 end
 
+--[[
+    For drawing the ball on screen.
+]]
 function Ball:render()
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 end

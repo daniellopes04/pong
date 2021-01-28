@@ -34,7 +34,6 @@ PADDLE_SPEED = 200
     Runs when the game starts, only once. It's used to intialize the game state at the beginning
     of program execution.
 ]]
-
 function love.load()
     -- Use nearest-neighbor filtering on upscaling and downscaling to give it a more low-res look.
     love.graphics.setDefaultFilter("nearest", "nearest")
@@ -63,7 +62,6 @@ function love.load()
     }
 
     -- Setting up a window with virtual size using "push". 
-    -- The virtual resolution will be rendered within the screen, no matter its dimensions. 
     push:setupScreen(VIRTUAL_WIDTH, VIRTUAL_HEIGHT, WINDOW_WIDTH, WINDOW_HEIGHT,{
         fullscreen = false,
         resizable = true,
@@ -88,8 +86,6 @@ function love.load()
     winningPlayer = 0
 
     -- Used to transition between different states of the game.
-    -- Normally used for beginning, menus, main game, high score list, etc.
-    -- In this game, it is used to determine behavior during render and update.
     gameState = "start"
 
     -- Used to track the game mode set by the player.
@@ -107,7 +103,6 @@ end
 --[[
     Keyboard entry handler, called each frame. The parameter is the key pressed by the user.
 ]]
-
 function love.keypressed(key)
     if key == "escape" then
         -- Terminate application.
@@ -145,8 +140,7 @@ function love.keypressed(key)
         end
     end
     
-    -- Pressing enter during the "start" state will change the game state to "play".
-    -- In the "play" state, the ball will move in a random direction.
+    -- Changes from "serve" state to "play" state and from "done" to "serve".
     if key == "enter" or key == "return" then
         if gameState == "serve" then
             gameState = "play"
@@ -173,7 +167,6 @@ end
     Called each frame, updates the game state components. The parameter is the elapsed time
     (deltaTime) since the last frame.
 ]]
-
 function love.update(dt)
     -- Player 1 movement.
     if gameMode == 1 or gameMode == 2 then
@@ -226,8 +219,6 @@ function love.update(dt)
         end
     elseif gameState == "play" then
         -- Detect ball collision with paddles.
-        -- Reverses the dx if collision is true, slightly increasing it.
-        -- Changes dy based on the position.
         if ball:collides(player1) then
             ball.dx = -ball.dx * 1.03
             ball.x = player1.x + 5
@@ -316,7 +307,6 @@ end
 --[[
     Called each frame for drawing to the screen after the update or otherwise.
 ]]
-
 function love.draw()
     -- Begin rendering in virtual resolution
     push:apply("start")
@@ -382,7 +372,6 @@ end
 --[[
     Renders the current FPS.
 ]]
-
 function displayFPS()
     love.graphics.setFont(smallFont)
     love.graphics.setColor(0, 1, 0, 1)

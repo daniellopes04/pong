@@ -12,7 +12,6 @@ Paddle = Class{}
 --[[
     Initializes the Paddle object with the given parameters and sets its initial velocity.
 ]]
-
 function Paddle:init(x, y, width, height)
     self.x = x
     self.y = y
@@ -24,7 +23,6 @@ end
 --[[
     For apllying the velocity to paddle's position and drawing it on screen.
 ]]
-
 function Paddle:update(dt)
     if self.dy < 0 then
         self.y = math.max(0, self.y + self.dy * dt)
@@ -33,6 +31,9 @@ function Paddle:update(dt)
     end
 end
 
+--[[
+    For drawing the paddle on screen.
+]]
 function Paddle:render()
     love.graphics.rectangle("fill", self.x, self.y, self.width, self.height)
 end
