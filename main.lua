@@ -177,8 +177,15 @@ function love.update(dt)
         else
             player1.dy = 0
         end
+    -- Player 1 simple AI movement
     else
-        player1.dy = ball.dy
+        if ball.y + ball.height < player1.y + player1.height / 2 then
+            player1.dy = -PADDLE_SPEED
+        elseif ball.y > player1.y + player1.height / 2 then
+            player1.dy = PADDLE_SPEED
+        else
+            player1.dy = 0
+        end
     end
         
     -- Player 2 movement.
@@ -192,7 +199,13 @@ function love.update(dt)
         end
     -- Player 2 simple AI movement.
     else
-        player2.dy = ball.dy
+        if ball.y + ball.height < player2.y + player2.height / 2 then
+            player2.dy = -PADDLE_SPEED
+        elseif ball.y > player2.y + player2.height / 2 then
+            player2.dy = PADDLE_SPEED
+        else
+            player2.dy = 0
+        end
     end
 
     -- Implements the mechanics of the game.
