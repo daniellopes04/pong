@@ -1,7 +1,7 @@
 # Pong Game
 ***Lecture 0* on "S50's Intro to Game Development" course, available on [YouTube](https://www.youtube.com/playlist?list=PLWKjhJtqVAbluXJKKbCIb4xd7fcRkpzoz)**
     
-Implementation of arcade game ["Pong"](https://www.wikiwand.com/en/Pong).
+Implementation of arcade game ["Pong"](https://pt.wikipedia.org/wiki/Pong).
 
 **Rules:**
 - Each player controls a paddle which must be used to hit the ball into the opponent's 
