@@ -23,7 +23,7 @@ opponent scores a point.
 
 ### Build
 
-First, you have to install ["LÖVE2D"](https://love2d.org/), then run the following.
+First, you have to install [LÖVE2D](https://love2d.org/), then run the following.
 
 ```bash
     git clone https://github.com/daniellopes04/pong
@@ -33,4 +33,4 @@ First, you have to install ["LÖVE2D"](https://love2d.org/), then run the follow
 
 ### Run
 
-Simply go to ["Resources"](https://github.com/daniellopes04/pong/tree/main/sounds) folder and download the version compatible with your system.
+Simply go to ["Resources"](https://github.com/daniellopes04/pong/tree/main/resources) folder and download the version compatible with your system.
