@@ -18,3 +18,19 @@ opponent scores a point.
 ## Possible updates
 
 1. Adapt AI movement so it is more close to a human opponent. Currently the movement is too precise and machine-like, so it is basically impossible to score a point in Player vs. Com mode.
+
+## Installation
+
+### Build
+
+First, you have to install ["LÖVE2D"](https://love2d.org/), then run the following.
+
+```bash
+    git clone https://github.com/daniellopes04/pong
+    cd pong
+    love .
+```
+
+### Run
+
+Simply go to ["Resources"](https://github.com/daniellopes04/pong/tree/main/sounds) folder and download the version compatible with your system.
