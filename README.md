@@ -14,12 +14,12 @@ opponent scores a point.
 
 ## Objectives
 
-1. ~Implement a version from the game Pong, where the paddles are moved by input detected from the keyboard.~
-2. ~Implement an AI version of either paddle of player 1 or 2 (or both).~
+- [x] Implement a version from the game Pong, where the paddles are moved by input detected from the keyboard.
+- [x] Implement an AI version of either paddle of player 1 or 2 (or both).
 
 ## Possible updates
 
-1. Adapt AI movement so it is more close to a human opponent. Currently the movement is too precise and machine-like, so it is basically impossible to score a point in Player vs. Com mode.
+- [ ] Adapt AI movement so it is more close to a human opponent. Currently the movement is too precise and machine-like, so it is basically impossible to score a point in Player vs. Com mode.
 
 ## Installation
 
