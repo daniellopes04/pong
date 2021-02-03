@@ -1,4 +1,4 @@
-# Pong Game
+# ![Pong](https://github.com/daniellopes04/pong/blob/main/resources/images/pong.png)
 ***Lecture 0* on "S50's Intro to Game Development" course, available on [YouTube](https://www.youtube.com/playlist?list=PLWKjhJtqVAbluXJKKbCIb4xd7fcRkpzoz)**
     
 Implementation of arcade game ["Pong"](https://pt.wikipedia.org/wiki/Pong).
@@ -9,6 +9,8 @@ player direction.
 - When the player isn't able to hit the ball back, letting it pass beyond its paddle, the 
 opponent scores a point.
 - By getting 10 points, a player wins the match.
+
+![Screen1](https://github.com/daniellopes04/pong/blob/main/resources/images/print1.png)
 
 ## Objectives
 
@@ -26,9 +28,13 @@ opponent scores a point.
 First, you have to install [LÖVE2D](https://love2d.org/), then run the following.
 
 ```bash
-    git clone https://github.com/daniellopes04/pong
-    cd pong
-    love .
+git clone https://github.com/daniellopes04/pong
+```
+```bash
+cd pong
+```
+```bash
+love .
 ```
 
 ### Run
