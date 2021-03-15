@@ -1,4 +1,4 @@
-# ![Pong](https://github.com/daniellopes04/pong/blob/main/resources/images/pong.png)
+# ![Pong](https://github.com/daniellopes04/pong/blob/main/resources/images/pong1.png)
 ***Lecture 0* on "S50's Intro to Game Development" course, available on [YouTube](https://www.youtube.com/playlist?list=PLWKjhJtqVAbluXJKKbCIb4xd7fcRkpzoz)**
     
 Implementation of arcade game ["Pong"](https://pt.wikipedia.org/wiki/Pong).
